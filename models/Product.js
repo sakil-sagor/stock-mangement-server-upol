@@ -3,6 +3,10 @@ const validator = require("validator");
 
 const ProductSchema = mongoose.Schema(
   {
+    productId: {
+      type: String,
+      default: "1000",
+    },
     productName: {
       type: String,
       required: [true, "Please provide product name"],
@@ -17,21 +21,10 @@ const ProductSchema = mongoose.Schema(
       minLength: [3, "Name must be at least 3 characters."],
       maxLength: [100, "Name is too large"],
     },
-    productType: {
+    brand: {
       type: String,
-      unique: true,
-      validate: [
-        validator.isMobilePhone,
-        "Please provide a valid contact number",
-      ],
-      minLength: 11,
-      maxLength: 11,
       required: true,
-    },
-
-    productId: {
-      type: String,
-      default: "1000",
+      lowercase: true,
     },
     origin: {
       type: String,
@@ -39,46 +32,43 @@ const ProductSchema = mongoose.Schema(
       lowercase: true,
     },
 
-    brand: {
+    quantity: {
       type: String,
       required: true,
       lowercase: true,
     },
-    unit: {
-      type: String,
+    buyPrice: {
+      type: Number,
       required: true,
-      lowercase: true,
     },
-    bloodGroup: {
-      type: String,
-      trim: true,
-      uppercase: true,
+    costPrice: {
+      type: Number,
       required: true,
-      enum: {
-        values: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
-        message: "{VALUE} is not a valid name",
-      },
+    },
+    salePrice: {
+      type: Number,
+      required: true,
     },
 
-    department: {
-      type: String,
-      required: true,
-      lowercase: true,
-    },
     joining: {
       type: Date,
     },
 
-    address: {
+    status: {
       type: String,
-      required: true,
-      lowercase: true,
+      enum: ["active", "deactive"],
+      default: "active",
     },
 
-    title: {
+    stock: {
       type: String,
+      enum: ["in-stock", "out-of-stock"],
+      default: "in-stock",
+    },
+
+    batch: {
+      type: Number,
       required: true,
-      lowercase: true,
     },
     image: {
       type: String,
@@ -92,21 +82,13 @@ const ProductSchema = mongoose.Schema(
         message: "Invalid image URL",
       },
     },
-
-    password: {
+    showroom: {
       type: String,
-      required: [true, "Password is required"],
-      default: "123456",
+      default: "main",
     },
-    role: {
-      type: String,
-      enum: ["suparAdmin", "admin", "teacher"],
-      default: "teacher",
-    },
-    status: {
-      type: String,
-      enum: ["active", "deactive"],
-      default: "active",
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -114,5 +96,5 @@ const ProductSchema = mongoose.Schema(
   }
 );
 
-const Teacher = mongoose.model("Teacher", TeacherSchema);
-module.exports = Teacher;
+const Product = mongoose.model("Product", ProductSchema);
+module.exports = Product;
