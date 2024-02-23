@@ -33,9 +33,8 @@ const ProductSchema = mongoose.Schema(
     },
 
     quantity: {
-      type: String,
+      type: Number,
       required: true,
-      lowercase: true,
     },
     buyPrice: {
       type: Number,
@@ -50,10 +49,6 @@ const ProductSchema = mongoose.Schema(
       required: true,
     },
 
-    joining: {
-      type: Date,
-    },
-
     status: {
       type: String,
       enum: ["active", "deactive"],
@@ -66,10 +61,6 @@ const ProductSchema = mongoose.Schema(
       default: "in-stock",
     },
 
-    batch: {
-      type: Number,
-      required: true,
-    },
     image: {
       type: String,
       validate: {
@@ -82,10 +73,7 @@ const ProductSchema = mongoose.Schema(
         message: "Invalid image URL",
       },
     },
-    showroom: {
-      type: String,
-      default: "main",
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,
