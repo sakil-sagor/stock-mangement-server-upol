@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-const { createUserInDB } = require("../services/user.service");
+const { createUserInDB, getUserInDB } = require("../services/user.service");
 
 exports.createUser = async (req, res) => {
   try {
@@ -20,6 +20,40 @@ exports.createUser = async (req, res) => {
       status: "success",
       message: "Successfully created user",
       data: createdUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: "Couldn't create Product",
+      error: error.message,
+    });
+  }
+};
+
+exports.getuser = async (req, res) => {
+  try {
+    const { phone, password } = req.body;
+    console.log(phone, password);
+
+    if (!phone || !password) {
+      return res.status(401).json({
+        status: "fail",
+        error: "please provide your credentials",
+      });
+    }
+
+    const findUserbyPhone = await getUserInDB(phone, password);
+    if (!findUserbyPhone) {
+      return res.status(401).json({
+        status: "fail",
+        error: "No user found, please create an account",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully get user",
+      data: findUserbyPhone,
     });
   } catch (error) {
     res.status(500).json({
