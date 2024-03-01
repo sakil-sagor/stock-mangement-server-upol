@@ -1,6 +1,11 @@
 const User = require("../models/User");
 
-const { createUserInDB, getUserInDB } = require("../services/user.service");
+const {
+  createUserInDB,
+  getUserInDB,
+  findUserByPhone,
+} = require("../services/user.service");
+const { generateToken } = require("../utils/token");
 
 exports.createUser = async (req, res) => {
   try {
@@ -30,8 +35,9 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.getuser = async (req, res) => {
+exports.loginUser = async (req, res) => {
   try {
+    console.log(req.body);
     const { phone, password } = req.body;
     console.log(phone, password);
 
@@ -42,18 +48,40 @@ exports.getuser = async (req, res) => {
       });
     }
 
-    const findUserbyPhone = await getUserInDB(phone, password);
-    if (!findUserbyPhone) {
+    const findUser = await getUserInDB(phone, password);
+    if (!findUser) {
       return res.status(401).json({
         status: "fail",
         error: "No user found, please create an account",
       });
     }
+    const token = generateToken(findUser);
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .send({ success: true, userData: findUser });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: "Couldn't find user",
+      error: error.message,
+    });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const { phoneNumber } = req.params;
+    console.log(phoneNumber);
+
+    const userData = await findUserByPhone(phoneNumber);
 
     res.status(200).json({
       status: "success",
-      message: "Successfully get user",
-      data: findUserbyPhone,
+      data: userData,
     });
   } catch (error) {
     res.status(500).json({

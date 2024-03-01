@@ -8,6 +8,17 @@ exports.createUserInDB = async (user) => {
 
 // get single user
 exports.getUserInDB = async (phone, password) => {
-  const result = await User.findOne({ phone: phone, password: password });
+  const result = await User.findOne({
+    phone: phone,
+    password: password,
+  }).select("fullName email role phone -_id");
+  return result;
+};
+
+// get single user
+exports.findUserByPhone = async (phone) => {
+  const result = await User.findOne({
+    phone: phone,
+  }).select("-password -_id");
   return result;
 };
