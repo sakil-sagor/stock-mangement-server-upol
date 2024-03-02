@@ -1,5 +1,8 @@
 const Product = require("../models/Product");
-const { createProductService } = require("../services/product.service");
+const {
+  createProductService,
+  getprocutFromDB,
+} = require("../services/product.service");
 
 exports.createProduct = async (req, res) => {
   try {
@@ -22,6 +25,22 @@ exports.createProduct = async (req, res) => {
       status: "success",
       message: "Successfully created product",
       data: product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: "Couldn't create Product",
+      error: error.message,
+    });
+  }
+};
+exports.getAllProduct = async (req, res) => {
+  try {
+    const products = await getprocutFromDB();
+    res.status(200).json({
+      status: "success",
+      message: "Successfully created product",
+      data: products,
     });
   } catch (error) {
     res.status(500).json({
