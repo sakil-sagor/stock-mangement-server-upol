@@ -4,9 +4,9 @@ const { promisify } = require("util");
 module.exports = async (req, res, next) => {
   try {
     const { phone } = req?.params;
-    console.log("1111");
+
     const token = req?.cookies?.token;
-    console.log(token);
+
     if (!token) {
       return res.status(401).json({
         status: "fail",

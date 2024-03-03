@@ -37,9 +37,7 @@ exports.createUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-    console.log(req.body);
     const { phone, password } = req.body;
-    console.log(phone, password);
 
     if (!phone || !password) {
       return res.status(401).json({
@@ -75,7 +73,6 @@ exports.loginUser = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const { phoneNumber } = req.params;
-    console.log(phoneNumber);
 
     const userData = await findUserByPhone(phoneNumber);
 
